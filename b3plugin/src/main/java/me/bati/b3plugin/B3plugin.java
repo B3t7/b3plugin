@@ -1,5 +1,6 @@
 package me.bati.b3plugin;
 
+import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -26,7 +27,7 @@ public final class B3plugin extends JavaPlugin implements Listener {
     @EventHandler
     public void onPlayerJoin(PlayerJoinEvent event){
         Player p = event.getPlayer();
-        Long plastplayed = p.getLastPlayed();
+        String pstr = p.getDisplayName();
         Location joinloc = p.getLocation();
 
         Double xlocdb = joinloc.getX();
@@ -37,11 +38,10 @@ public final class B3plugin extends JavaPlugin implements Listener {
         int yloc = (int) Math.round(ylocdb);
         int zloc = (int) Math.round(zlocdb);
 
-        String strjoinloc = ("[ "+ xloc+ " " + yloc +" "+ zloc + " ]");
+        String strjoinloc = (ChatColor.GREEN + "[ "+ xloc+ " " + yloc +" "+ zloc + " ]");
+        event.setJoinMessage(pstr + " joined at "+ strjoinloc + " welcome!");
 
-        event.setJoinMessage(p + " joined at "+ strjoinloc);
 
-        p.sendMessage("Last online : "+ plastplayed);
 
 
     }
