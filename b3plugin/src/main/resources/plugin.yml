@@ -1,0 +1,4 @@
+name: b3plugin
+version: '${project.version}'
+main: me.bati.b3plugin.B3plugin
+api-version: '1.20'
