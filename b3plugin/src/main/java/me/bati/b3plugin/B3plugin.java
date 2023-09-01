@@ -4,10 +4,13 @@ import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.entity.Egg;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
@@ -15,19 +18,16 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import javax.swing.*;
 import java.util.Collections;
-import java.util.Objects;
+import java.util.List;
 
-import static org.bukkit.event.block.Action.RIGHT_CLICK_AIR;
-
+@SuppressWarnings("ALL")
 public final class B3plugin extends JavaPlugin implements Listener {
 
+    ItemStack lgrod = new ItemStack(Material.BLAZE_ROD, 1);
+    ItemStack grenade = new ItemStack(Material.EGG, 1);
 
-    ItemStack lgrod = new ItemStack(Material.BLAZE_ROD,1);
-
-
-    public void AddLgrod(){
+    public void AddLgrod() {
         ItemMeta lgrodmeta = lgrod.getItemMeta();
         assert lgrodmeta != null;
         lgrodmeta.setDisplayName(ChatColor.YELLOW + "LIGHTNING ROD");
@@ -35,11 +35,18 @@ public final class B3plugin extends JavaPlugin implements Listener {
         lgrod.setItemMeta(lgrodmeta);
     }
 
+    public void AddGrnd() {
+        ItemMeta grndmeta = grenade.getItemMeta();
+        assert grndmeta != null;
+        grndmeta.setDisplayName(ChatColor.GREEN + "GRENADE");
+        grndmeta.setLore(Collections.singletonList(ChatColor.RED + "boom boom"));
+        grenade.setItemMeta(grndmeta);
+    }
+
     @Override
     public void onEnable() {
         System.out.println("++++ B3plugin has started ++++");
         getServer().getPluginManager().registerEvents(this, this);
-
     }
 
     @Override
@@ -47,53 +54,76 @@ public final class B3plugin extends JavaPlugin implements Listener {
         System.out.println("++++ B3plugin has stopped ++++");
     }
 
-
-
     @EventHandler
-    public void onPlayerJoin(PlayerJoinEvent event){
+    public void onPlayerJoin(PlayerJoinEvent event) {
+        AddGrnd();
         AddLgrod();
         Player p = event.getPlayer();
         String pstr = p.getDisplayName();
         Location joinloc = p.getLocation();
         GameMode pgmd = p.getGameMode();
         Inventory jinv = p.getInventory();
-        Boolean isop = event.getPlayer().isOp();
+        boolean isop = event.getPlayer().isOp();
 
-        Double xlocdb = joinloc.getX();
-        Double ylocdb = joinloc.getY();
-        Double zlocdb = joinloc.getY();
+        double xlocdb = joinloc.getX();
+        double ylocdb = joinloc.getY();
+        double zlocdb = joinloc.getY();
 
         int xloc = (int) Math.round(xlocdb);
         int yloc = (int) Math.round(ylocdb);
         int zloc = (int) Math.round(zlocdb);
 
-        String strjoinloc = (ChatColor.GREEN + "[ "+ xloc+ " " + yloc +" "+ zloc + " ]");
-        event.setJoinMessage(pstr + " joined at "+ strjoinloc + " welcome!");
+        String strjoinloc = (ChatColor.GREEN + "[ " + xloc + " " + yloc + " " + zloc + " ]");
+        event.setJoinMessage(pstr + " joined at " + strjoinloc + " welcome!");
 
-        if (isop && pgmd == GameMode.CREATIVE ){
+        if (isop && pgmd == GameMode.CREATIVE) {
             jinv.addItem(lgrod);
+            jinv.addItem(grenade);
         }
-
-
-
-
     }
-    @EventHandler
-    public void onPlayerLgrodRC(PlayerInteractEvent event){
-        AddLgrod();
-        Location rcpos = event.getPlayer().getTargetBlock(null,512).getLocation();
-        ItemMeta itmm = Objects.requireNonNull(event.getItem()).getItemMeta();
 
-        event.getAction();
-        if(event.getAction() == Action.RIGHT_CLICK_AIR){
-            if(itmm != null && itmm.equals(lgrod.getItemMeta())){
+    @EventHandler
+    public void onPlayerLgrodRC(PlayerInteractEvent event) {
+        AddLgrod();
+        Location rcpos = event.getPlayer().getTargetBlock(null, 512).getLocation();
+        ItemStack itemStack = event.getItem();
+        assert itemStack != null;
+        ItemMeta itmm = itemStack.getItemMeta();
+
+        if (itmm != null) {
+            if (event.getAction() == Action.RIGHT_CLICK_AIR && itmm.equals(lgrod.getItemMeta())) {
                 event.getPlayer().getWorld().strikeLightning(rcpos);
             }
-
-
         }
+    }
 
+    @EventHandler
+    public void onProjectileHit(ProjectileHitEvent event) {
+        if (event.getEntity() instanceof Egg) {
+            Egg egg = (Egg) event.getEntity();
+            ItemStack eggItemStack = egg.getItem();
+
+            // Check if the egg's custom name and lore match
+            if (hasDesiredNameAndLore(eggItemStack, ChatColor.GREEN + "GRENADE", ChatColor.RED + "boom boom")) {
+                egg.getWorld().spawnEntity(egg.getLocation(), EntityType.PRIMED_TNT);
+            }
+        }
+    }
+
+    // Helper method to check if an ItemStack has a specific display name and lore
+    private boolean hasDesiredNameAndLore(ItemStack itemStack, String displayName, String lore) {
+        if (itemStack != null) {
+            ItemMeta itemMeta = itemStack.getItemMeta();
+            if (itemMeta != null) {
+                String itemDisplayName = itemMeta.getDisplayName();
+                List<String> itemLore = itemMeta.getLore();
+                return itemDisplayName.equals(displayName) && itemLore != null && itemLore.contains(lore);
+            }
+        }
+        return false;
     }
 }
+
+
 
 
