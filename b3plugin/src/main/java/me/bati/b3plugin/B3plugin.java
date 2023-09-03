@@ -86,12 +86,12 @@ public final class B3plugin extends JavaPlugin implements Listener {
     public void onPlayerLgrodRC(PlayerInteractEvent event) {
         AddLgrod();
         Location rcpos = event.getPlayer().getTargetBlock(null, 512).getLocation();
-        ItemStack itemStack = event.getItem();
-        assert itemStack != null;
-        ItemMeta itmm = itemStack.getItemMeta();
 
-        if (itmm != null) {
-            if (event.getAction() == Action.RIGHT_CLICK_AIR && itmm.equals(lgrod.getItemMeta())) {
+        ItemStack item = event.getItem(); // Get the item in hand
+        if (item != null) { // Check if the item is not null
+            ItemMeta itmm = item.getItemMeta();
+
+            if (event.getAction() == Action.RIGHT_CLICK_AIR && itmm != null && itmm.equals(lgrod.getItemMeta())) {
                 event.getPlayer().getWorld().strikeLightning(rcpos);
             }
         }
