@@ -1,5 +1,6 @@
 package me.bati.b3plugin;
 
+import me.bati.b3plugin.commands.b3give;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -47,6 +48,8 @@ public final class B3plugin extends JavaPlugin implements Listener {
     public void onEnable() {
         System.out.println("++++ B3plugin has started ++++");
         getServer().getPluginManager().registerEvents(this, this);
+        this.getCommand("b3givelgrod").setExecutor(new b3give());
+        this.getCommand("b3givegrenade").setExecutor(new b3give());
     }
 
     @Override
