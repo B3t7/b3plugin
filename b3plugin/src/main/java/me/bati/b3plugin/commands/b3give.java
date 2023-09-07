@@ -14,7 +14,15 @@ import java.util.Collections;
 public class b3give implements CommandExecutor {
     ItemStack lgrod = new ItemStack(Material.BLAZE_ROD, 1);
     ItemStack grenade = new ItemStack(Material.EGG, 1);
+    ItemStack mgmn = new ItemStack(Material.PRISMARINE_SHARD,1);
 
+
+    public void AddMgmn(){
+        ItemMeta mgmnmeta = mgmn.getItemMeta();
+        mgmnmeta.setDisplayName(ChatColor.YELLOW + "Magic Mineral");
+        mgmnmeta.setLore(Collections.singletonList(ChatColor.BLUE+"Used to craft special items."));
+        mgmn.setItemMeta(mgmnmeta);
+    }
     public void AddLgrod() {
         ItemMeta lgrodmeta = lgrod.getItemMeta();
         assert lgrodmeta != null;
@@ -40,6 +48,7 @@ public class b3give implements CommandExecutor {
         if (command.getName().equalsIgnoreCase("b3give")) {
             AddGrnd();
             AddLgrod();
+            AddMgmn();
             if (commandSender instanceof Player) {
                 Player p = ((Player) commandSender).getPlayer();
 
@@ -47,8 +56,8 @@ public class b3give implements CommandExecutor {
 
                 if (strings.length == 0) {
                     assert p != null;
-                    p.sendMessage("Specify an item.");
-                    p.sendMessage("/b3give <item>");
+                    p.sendMessage("Specify an item and amount.");
+                    p.sendMessage("/b3give <item> <amount>");
                     System.out.println("strlenght 0");
 
                 } else if (strings.length == 1) {
@@ -57,10 +66,17 @@ public class b3give implements CommandExecutor {
                         AddLgrod();
                         assert p != null;
                         p.getInventory().addItem(lgrod);
-                    } else if (arg.equalsIgnoreCase("grenade")) {
+                    }
+                    else if (arg.equalsIgnoreCase("grenade")) {
                         AddGrnd();
                         assert p != null;
                         p.getInventory().addItem(grenade);
+                    }
+                    else if(arg.equalsIgnoreCase("MagicMineral")) {
+                        AddMgmn();
+                        assert p != null;
+                        p.getInventory().addItem(mgmn);
+
                     }
                 } else if (strings.length == 2) {
                     int arg2 = Integer.parseInt(strings[1]);
@@ -74,11 +90,19 @@ public class b3give implements CommandExecutor {
                         p.getInventory().addItem(lgrod);
 
 
-                    } else if (arg.equalsIgnoreCase("grenade")) {
+                    }
+                    else if (arg.equalsIgnoreCase("grenade")) {
                         AddGrnd();
                         grenade.setAmount(arg2);
                         assert p != null;
                         p.getInventory().addItem(grenade);
+
+                    }
+                    else if (arg.equalsIgnoreCase("MagicMineral")) {
+                        AddMgmn();
+                        mgmn.setAmount(arg2);
+                        assert p != null;
+                        p.getInventory().addItem(mgmn);
 
                     }
 

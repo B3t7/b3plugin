@@ -1,16 +1,15 @@
 package me.bati.b3plugin;
 
 import me.bati.b3plugin.commands.b3give;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -21,16 +20,19 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 
 @SuppressWarnings("ALL")
 public final class B3plugin extends JavaPlugin implements Listener {
 
+    Random rand = new Random();
+
     ItemStack lgrod = new ItemStack(Material.BLAZE_ROD, 1);
     ItemStack grenade = new ItemStack(Material.EGG, 1);
+    ItemStack mgmn = new ItemStack(Material.PRISMARINE_SHARD,1);
 
     public void AddLgrod() {
         ItemMeta lgrodmeta = lgrod.getItemMeta();
-        assert lgrodmeta != null;
         lgrodmeta.setDisplayName(ChatColor.YELLOW + "LIGHTNING ROD");
         lgrodmeta.setLore(Collections.singletonList(ChatColor.RED + "Right click to strike lightning."));
         lgrod.setItemMeta(lgrodmeta);
@@ -38,10 +40,16 @@ public final class B3plugin extends JavaPlugin implements Listener {
 
     public void AddGrnd() {
         ItemMeta grndmeta = grenade.getItemMeta();
-        assert grndmeta != null;
         grndmeta.setDisplayName(ChatColor.GREEN + "GRENADE");
         grndmeta.setLore(Collections.singletonList(ChatColor.RED + "boom boom"));
         grenade.setItemMeta(grndmeta);
+    }
+
+    public void AddMgmn(){
+        ItemMeta mgmnmeta = mgmn.getItemMeta();
+        mgmnmeta.setDisplayName(ChatColor.YELLOW + "Magic Mineral");
+        mgmnmeta.setLore(Collections.singletonList(ChatColor.BLUE+"Used to craft special items."));
+        mgmn.setItemMeta(mgmnmeta);
     }
 
     @Override
@@ -124,6 +132,28 @@ public final class B3plugin extends JavaPlugin implements Listener {
             }
         }
         return false;
+    }
+
+
+    @EventHandler
+    public void onPlayerBreak(BlockBreakEvent event){
+        Player p = event.getPlayer();
+        Block broken_block = event.getBlock();
+        Material brblmt = broken_block.getType();
+        if (brblmt == Material.STONE){
+            AddMgmn();
+            int randint = rand.nextInt(21);
+            if (randint == 1){
+                Location blockloc = event.getBlock().getLocation();
+                 World brblwrld = broken_block.getWorld();
+                 brblwrld.dropItemNaturally(blockloc,mgmn);
+
+            }
+
+        }
+
+
+
     }
 }
 
