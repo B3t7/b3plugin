@@ -3,9 +3,7 @@ version: '${project.version}'
 main: me.bati.b3plugin.B3plugin
 api-version: '1.20'
 commands:
-  b3givegrenade:
-    description: Give a grenade
-    usage: /b3givegrenade
-  b3givelgrod:
-    description: Give a lightning rod
-    usage: /b3givelgrod
+  b3give:
+    description: B3 plugin give command
+    usage: /b3give <item> <item_amount>
+

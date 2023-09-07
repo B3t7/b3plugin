@@ -34,30 +34,65 @@ public class b3give implements CommandExecutor {
 
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) {
+    public boolean onCommand(CommandSender commandSender, Command command, String s, String[] strings) throws ArrayIndexOutOfBoundsException {
 
 
-
-        if (command.getName().equalsIgnoreCase("b3givegrenade")){
+        if (command.getName().equalsIgnoreCase("b3give")) {
             AddGrnd();
-            if (commandSender instanceof Player){
-                Player p = ((Player) commandSender).getPlayer();
-                    p.getInventory().addItem(grenade);
-
-
-
-            }
-
-        }else if(command.getName().equalsIgnoreCase("b3givelgrod")) {
             AddLgrod();
             if (commandSender instanceof Player) {
                 Player p = ((Player) commandSender).getPlayer();
-                p.getInventory().addItem(lgrod);
 
+
+
+                if (strings.length == 0) {
+                    assert p != null;
+                    p.sendMessage("Specify an item.");
+                    p.sendMessage("/b3give <item>");
+                    System.out.println("strlenght 0");
+
+                } else if (strings.length == 1) {
+                    String arg = strings[0];
+                    if (arg.equalsIgnoreCase("lgrod")) {
+                        AddLgrod();
+                        assert p != null;
+                        p.getInventory().addItem(lgrod);
+                    } else if (arg.equalsIgnoreCase("grenade")) {
+                        AddGrnd();
+                        assert p != null;
+                        p.getInventory().addItem(grenade);
+                    }
+                } else if (strings.length == 2) {
+                    int arg2 = Integer.parseInt(strings[1]);
+                    System.out.println("arg2 is "+arg2);
+                    String arg = strings[0];
+
+                    if (arg.equalsIgnoreCase("lgrod")) {
+                        AddLgrod();
+                        lgrod.setAmount(arg2);
+                        assert p != null;
+                        p.getInventory().addItem(lgrod);
+
+
+                    } else if (arg.equalsIgnoreCase("grenade")) {
+                        AddGrnd();
+                        grenade.setAmount(arg2);
+                        assert p != null;
+                        p.getInventory().addItem(grenade);
+
+                    }
+
+
+                }
 
             }
+
+
+            }return true;
+
+
+
         }
 
-        return true;
     }
-}
+
