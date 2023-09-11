@@ -5,7 +5,9 @@ import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -21,6 +23,8 @@ public class b3give implements CommandExecutor {
         ItemMeta mgmnmeta = mgmn.getItemMeta();
         mgmnmeta.setDisplayName(ChatColor.YELLOW + "Magic Mineral");
         mgmnmeta.setLore(Collections.singletonList(ChatColor.BLUE+"Used to craft special items."));
+        mgmnmeta.addEnchant(Enchantment.SOUL_SPEED,1,true);
+        mgmnmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         mgmn.setItemMeta(mgmnmeta);
     }
     public void AddLgrod() {
@@ -28,6 +32,8 @@ public class b3give implements CommandExecutor {
         assert lgrodmeta != null;
         lgrodmeta.setDisplayName(ChatColor.YELLOW + "LIGHTNING ROD");
         lgrodmeta.setLore(Collections.singletonList(ChatColor.RED + "Right click to strike lightning."));
+        lgrodmeta.addEnchant(Enchantment.SOUL_SPEED,1,true);
+        lgrodmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         lgrod.setItemMeta(lgrodmeta);
     }
 
@@ -36,6 +42,8 @@ public class b3give implements CommandExecutor {
         assert grndmeta != null;
         grndmeta.setDisplayName(ChatColor.GREEN + "GRENADE");
         grndmeta.setLore(Collections.singletonList(ChatColor.RED + "boom boom"));
+        grndmeta.addEnchant(Enchantment.SOUL_SPEED,1,true);
+        grndmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         grenade.setItemMeta(grndmeta);
     }
 

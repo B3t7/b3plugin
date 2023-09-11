@@ -3,6 +3,7 @@ package me.bati.b3plugin;
 import me.bati.b3plugin.commands.b3give;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.Egg;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
@@ -14,6 +15,7 @@ import org.bukkit.event.entity.ProjectileHitEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -35,6 +37,8 @@ public final class B3plugin extends JavaPlugin implements Listener {
         ItemMeta lgrodmeta = lgrod.getItemMeta();
         lgrodmeta.setDisplayName(ChatColor.YELLOW + "LIGHTNING ROD");
         lgrodmeta.setLore(Collections.singletonList(ChatColor.RED + "Right click to strike lightning."));
+        lgrodmeta.addEnchant(Enchantment.SOUL_SPEED,1,true);
+        lgrodmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         lgrod.setItemMeta(lgrodmeta);
     }
 
@@ -42,13 +46,18 @@ public final class B3plugin extends JavaPlugin implements Listener {
         ItemMeta grndmeta = grenade.getItemMeta();
         grndmeta.setDisplayName(ChatColor.GREEN + "GRENADE");
         grndmeta.setLore(Collections.singletonList(ChatColor.RED + "boom boom"));
+        grndmeta.addEnchant(Enchantment.SOUL_SPEED,1,true);
+        grndmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         grenade.setItemMeta(grndmeta);
+
     }
 
     public void AddMgmn(){
         ItemMeta mgmnmeta = mgmn.getItemMeta();
         mgmnmeta.setDisplayName(ChatColor.YELLOW + "Magic Mineral");
         mgmnmeta.setLore(Collections.singletonList(ChatColor.BLUE+"Used to craft special items."));
+        mgmnmeta.addEnchant(Enchantment.SOUL_SPEED,1,true);
+        mgmnmeta.addItemFlags(ItemFlag.HIDE_ENCHANTS);
         mgmn.setItemMeta(mgmnmeta);
     }
 
