@@ -20,18 +20,20 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Random;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 public final class B3plugin extends JavaPlugin implements Listener {
+
+
+
 
     Random rand = new Random();
 
     ItemStack lgrod = new ItemStack(Material.BLAZE_ROD, 1);
     ItemStack grenade = new ItemStack(Material.EGG, 1);
     ItemStack mgmn = new ItemStack(Material.PRISMARINE_SHARD,1);
+
 
     public void AddLgrod() {
         ItemMeta lgrodmeta = lgrod.getItemMeta();
@@ -66,6 +68,7 @@ public final class B3plugin extends JavaPlugin implements Listener {
         System.out.println("++++ B3plugin has started ++++");
         getServer().getPluginManager().registerEvents(this, this);
         this.getCommand("b3give").setExecutor(new b3give());
+        itemrecipes.register();
 
     }
 
@@ -104,18 +107,27 @@ public final class B3plugin extends JavaPlugin implements Listener {
 
     @EventHandler
     public void onPlayerLgrodRC(PlayerInteractEvent event) {
-        AddLgrod();
-        Location rcpos = event.getPlayer().getTargetBlock(null, 512).getLocation();
 
+        AddLgrod();
         ItemStack item = event.getItem(); // Get the item in hand
         if (item != null) { // Check if the item is not null
             ItemMeta itmm = item.getItemMeta();
 
             if (event.getAction() == Action.RIGHT_CLICK_AIR && itmm != null && itmm.equals(lgrod.getItemMeta())) {
-                event.getPlayer().getWorld().strikeLightning(rcpos);
+                Location rcpos = event.getPlayer().getTargetBlock(null, 512).getLocation();
+                Player lgrrcp = event.getPlayer();
+                lgrrcp.getWorld().strikeLightning(rcpos);
+
+
+
+
+
+                }
+
+
             }
         }
-    }
+
 
     @EventHandler
     public void onProjectileHit(ProjectileHitEvent event) {
@@ -151,8 +163,8 @@ public final class B3plugin extends JavaPlugin implements Listener {
         Material brblmt = broken_block.getType();
         if (brblmt == Material.STONE){
             AddMgmn();
-            int randint = rand.nextInt(21);
-            if (randint == 1){
+            int randint = rand.nextInt(15);
+            if (randint == 5){
                 Location blockloc = event.getBlock().getLocation();
                  World brblwrld = broken_block.getWorld();
                  brblwrld.dropItemNaturally(blockloc,mgmn);
